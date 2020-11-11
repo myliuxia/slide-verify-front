@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <slide-verify></slide-verify>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import SlideVerify from "./components/slide-verify.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    SlideVerify
   }
 };
 </script>
