@@ -1,0 +1,23 @@
+{
+  "id": "2205810",
+  "name": "滑块验证",
+  "font_family": "kr-icon",
+  "css_prefix_text": "kr-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "13753886",
+      "name": "滑动",
+      "font_class": "huadong",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "8634413",
+      "name": "刷新",
+      "font_class": "shuaxin",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}

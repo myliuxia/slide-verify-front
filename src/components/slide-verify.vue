@@ -36,7 +36,7 @@
           class="slide-verify-slider-mask-item"
           :style="{ left: sliderLeft }"
         >
-          <span class="iconfont icon-huadong"></span>
+          <span class="kr-icon kr-icon-huadong"></span>
         </div>
       </div>
       <span class="slide-verify-slider-text">{{ sliderText }}</span>
@@ -45,6 +45,7 @@
   </div>
 </template>
 <script>
+import "@/assets/iconfont/iconfont.css";
 /**
  * @description 滑块验证组件
  * @property {Number} w 画布宽度
