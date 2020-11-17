@@ -97,6 +97,7 @@ $--color-warning: #ff8000 !default;
     @include container(loading,$--color-success,$--color-success);
     @include container(success,$--color-success,$--color-success);
     @include container(fail,$--color-warning,$--color-warning);
+    @include container(verifying,$--color-warning,$--color-warning);
   }
   .mask-loading{
     position: absolute;

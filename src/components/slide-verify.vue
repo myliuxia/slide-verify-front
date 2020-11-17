@@ -11,9 +11,10 @@
       class="slide-verify-slider"
       :style="widthlable"
       :class="{
-        'container-active': containerActive,
-        'container-success': containerSuccess,
-        'container-fail': containerFail,
+        'container-verifying': status == 'verifying',
+        'container-active': status == 'active',
+        'container-success': status == 'success',
+        'container-fail': status == 'fail',
       }"
     >
       <div class="kr-slide-indicator" :style="{ width: sliderMaskWidth }"></div>
@@ -49,16 +50,6 @@ import '@/assets/iconfont/iconfont.css'
  * @event {Function} refresh 刷新回调方法
  * @event {Function} success 滑块确认回调方法，参数 left：横坐标滑动量
  */
-// const PI = Math.PI;
-
-// function sum(x, y) {
-//   return x + y;
-// }
-
-// function square(x) {
-//   return x * x;
-// }
-
 export default {
   name: 'SlideVerify',
   props: {
@@ -92,17 +83,12 @@ export default {
       type: String,
       default: '',
     },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
     keyCode: [String, Number],
   },
   data() {
     return {
-      containerActive: false, // container active class
-      containerSuccess: false, // container success class
-      containerFail: false, // container fail class
+      loading: false,
+      status: 'origin', //
       canvasCtx: null,
       blockCtx: null,
       block: null,
@@ -149,7 +135,6 @@ export default {
       img.onload = function () {
         that.canvasCtx.drawImage(img, 0, 0, that.w, that.h)
       }
-
       this.img = img
       const img1 = document.createElement('img')
       var blockCtx = that.blockCtx
@@ -176,36 +161,46 @@ export default {
     },
 
     touchMoveEvent(e) {
+      this.status = 'origin'
       if (!this.isMouseDown) return false
       const moveX = e.clientX - this.originX
       const moveY = e.clientY - this.originY
-      if (moveX < 0 || moveX + 38 >= this.w) return false
+      if (moveX < 0 || moveX + 40 >= this.w) return false
       this.sliderLeft = moveX + 'px'
       let blockLeft = ((this.w - this.block_w) / (this.w - 40)) * moveX
       this.block.style.left = blockLeft + 'px'
 
-      this.containerActive = true
+      this.status = 'active'
       this.sliderMaskWidth = 40 + moveX + 'px'
       this.trail.push(moveY)
     },
+
     touchEndEvent(e) {
       if (!this.isMouseDown) return false
       this.isMouseDown = false
       if (e.clientX === this.originX) {
-        this.containerActive = false
+        this.status = 'origin'
         return false
       }
       this.verify()
     },
+
     verify() {
       const left = parseInt(this.block.style.left)
-      this.containerActive = false
-      this.$emit('verify', left)
+      this.status = 'verifying'
+      this.$emit('verify', left, (result = true) => {
+        if (result) {
+          // 验证通过
+          this.status = 'success'
+        } else {
+          // 验证不通过
+          this.status = 'fail'
+        }
+      })
     },
+
     reset() {
-      this.containerActive = false
-      this.containerSuccess = false
-      this.containerFail = false
+      this.status = 'origin'
       this.sliderLeft = 0
       this.block.style.left = 0
       this.sliderMaskWidth = 0
