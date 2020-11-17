@@ -7,15 +7,15 @@ $--color-warning: #ff8000 !default;
 
   @mixin container($type, $bgColor, $borderColor,) {
     &.container-#{$type} {
-      .slide-verify-slider-mask{
+      .kr-slide-indicator{
         background: RGBA(62, 122, 242, 0.2) !important;
-        border-width: 1px 0 1px 1px;
+        border-color:  #3E7AF2;
       }
-      .slide-verify-slider-mask-item {
-        top: -1px;
+      .kr-slider {
+        background: #3E7AF2;
         color: #fff;
       }
-      .slide-verify-slider-text{
+      .kr-slide-text{
         display: none;
       }
     }
@@ -37,6 +37,7 @@ $--color-warning: #ff8000 !default;
     border-radius: 2px;
     overflow: hidden;
     background-color: rgba(255,255,255,0.7);
+    padding-bottom: 15px;
   }
   .slide-verify-refresh {
     position: absolute;
@@ -54,43 +55,53 @@ $--color-warning: #ff8000 !default;
     width: 320px;
     height: 40px;
     line-height: 40px;
-    margin-top: 15px;
-    background: RGBA(0, 0, 0, 0.2);
-    color: #ffffff;
+    background: #f7f9fa;
     box-sizing: border-box;
     border-radius: 2px;
-    .slide-verify-slider-mask {
+    border: 1px solid #e4e7eb;
+    .kr-slide-indicator {
       position: absolute;
-      left: 0;
-      top: 0;
+      left: -1px;
+      top: -1px;
       height: 40px;
       background: RGBA(62, 122, 242, 0.2);
-      border: 1px solid #3E7AF2;
+      border: 1px solid transparent;
       box-sizing: border-box;
-      border-width: 0;
-      border-top-left-radius: 2px;
-      border-bottom-left-radius: 2px;
+      border-radius: 2px;
     }
-    .slide-verify-slider-mask-item {
+    .kr-slider {
       position: absolute;
       top: 0;
       left: 0;
       width: 40px;
-      height: 40px;
-      background-image: linear-gradient(to right, #3E7BF3 , #4858E6);
+      height: 100%;
+      background-color: #fff;
+      box-shadow: 0 0 3px rgba(0,0,0,.3);
       cursor: pointer;
+      transition: background .2s linear;
+      color: #45494c;
       border-radius: 2px;
-      transition: background 0.2s linear;
+      &:hover{
+        background: #3E7AF2;
+        color: #fff;
+      }
       .iconfont {
         font-size: 18px;
       }
     }
+    .kr-slide-text{
+      font-size: 12px;
+      color: #45494c;
+    }
     @include container(active,$--color-primary,$--color-primary);
+    @include container(loading,$--color-success,$--color-success);
     @include container(success,$--color-success,$--color-success);
     @include container(fail,$--color-warning,$--color-warning);
   }
   .mask-loading{
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 1;
     width: 100%;
     height: 100%;
