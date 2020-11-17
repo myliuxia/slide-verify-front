@@ -6,18 +6,39 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "13753886",
-      "name": "滑动",
-      "font_class": "huadong",
-      "unicode": "e664",
-      "unicode_decimal": 58980
+      "icon_id": "15838438",
+      "name": "arrow-double-right",
+      "font_class": "arrow-right",
+      "unicode": "e665",
+      "unicode_decimal": 58981
     },
     {
-      "icon_id": "8634413",
-      "name": "刷新",
-      "font_class": "shuaxin",
-      "unicode": "e600",
-      "unicode_decimal": 58880
+      "icon_id": "15838444",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "15838460",
+      "name": "direction-right",
+      "font_class": "right",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "15838502",
+      "name": "loading",
+      "font_class": "loading",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "15838530",
+      "name": "select",
+      "font_class": "select",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
     }
   ]
 }

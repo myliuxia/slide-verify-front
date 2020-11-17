@@ -1,5 +1,5 @@
 <template>
-  <div class="slide-verify" id="slideVerify" :style="widthlable" onselectstart="return false;">
+  <div class="slide-verify" id="slideVerify" :style="style" onselectstart="return false;">
     <div class="canves-box">
       <canvas :width="w" :height="h" ref="canvas"></canvas>
       <canvas :width="w" :height="h" ref="block" class="slide-verify-block"></canvas>
@@ -9,30 +9,32 @@
     </div>
     <div
       class="slide-verify-slider"
-      :style="widthlable"
       :class="{
-        'container-verifying': status == 'verifying',
         'container-active': status == 'active',
         'container-success': status == 'success',
         'container-fail': status == 'fail',
       }"
     >
-      <div class="kr-slide-indicator" :style="{ width: sliderMaskWidth }"></div>
+      <div class="kr-slide-indicator" :style="slideIndicatorStyle"></div>
 
       <!-- slider -->
-      <div
-        @mousedown="sliderDown"
-        @mousemove="touchMoveEvent"
-        @mouseup="touchEndEvent"
-        @touchstart="touchStartEvent"
-        class="kr-slider"
-        :style="{ left: sliderLeft }"
-      >
-        <span class="kr-icon kr-icon-huadong"></span>
+      <div @mousedown="mouseDownEvent" class="kr-slider" :style="sliderStyle">
+        <span v-if="verifying" class="kr-icon kr-icon-loading animation"></span>
+        <span
+          v-else
+          class="kr-icon"
+          :class="{
+            'kr-icon-arrow-right': status == 'origin' ||status == 'active' ,
+            'kr-icon-select': status == 'success',
+            'kr-icon-close': status == 'fail',
+          }"
+        ></span>
       </div>
       <span class="kr-slide-text">{{ sliderText }}</span>
     </div>
-    <div class="mask-loading" v-show="loading"></div>
+    <div class="mask-loading" v-show="loading">
+      <span class="kr-icon kr-icon-loading animation"></span>
+    </div>
   </div>
 </template>
 <script>
@@ -87,22 +89,30 @@ export default {
   },
   data() {
     return {
-      loading: false,
-      status: 'origin', //
+      loading: false, // 加载中
+      verifying: false, // 验证中
+      status: 'origin', // 状态 origin：原始状态；active:拖动激活状态；success:验证成功；fail:验证失败
       canvasCtx: null,
       blockCtx: null,
       block: null,
       canvasStr: null,
-      img: undefined,
+      // 原始坐标
       originX: undefined,
       originY: undefined,
-      isMouseDown: false,
-      trail: [],
-      widthlable: '',
-      sliderLeft: 0, // block right offset
-      sliderMaskWidth: 0, // mask width
+      sliderLeft: 0, // 滑块偏移量
       refreshImg: require('@/assets/image/refresh.png'),
     }
+  },
+  computed: {
+    style() {
+      return { width: this.w + 'px' }
+    },
+    sliderStyle() {
+      return { left: this.sliderLeft + 'px' }
+    },
+    slideIndicatorStyle() {
+      return { width: this.sliderLeft + 40 + 'px' }
+    },
   },
   watch: {
     keyCode() {
@@ -116,7 +126,6 @@ export default {
   methods: {
     init() {
       this.initDom()
-      this.widthlable = 'width:' + this.w + 'px;'
     },
     initDom() {
       this.block = this.$refs.block
@@ -135,7 +144,6 @@ export default {
       img.onload = function () {
         that.canvasCtx.drawImage(img, 0, 0, that.w, that.h)
       }
-      this.img = img
       const img1 = document.createElement('img')
       var blockCtx = that.blockCtx
       img1.onerror = () => {
@@ -147,63 +155,69 @@ export default {
       }
     },
     refresh() {
-      this.$emit('refresh')
+      this.loading = true
+      this.$emit('refresh', (val) => {
+        this.reset()
+        this.loading = false
+      })
     },
-    sliderDown(event) {
-      this.originX = event.clientX
-      this.originY = event.clientY
-      this.isMouseDown = true
-    },
-    touchStartEvent(e) {
-      this.originX = e.changedTouches[0].pageX
-      this.originY = e.changedTouches[0].pageY
-      this.isMouseDown = true
+    // 鼠标点击
+    mouseDownEvent(e) {
+      e.preventDefault && e.preventDefault()
+      e.stopPropagation && e.stopPropagation()
+      this.originX = e.clientX
+      this.originY = e.clientY
+      document.addEventListener('mousemove', this.mouseMoveEvent, false)
+      document.addEventListener('mouseup', this.mouseUpEvent, false)
     },
 
-    touchMoveEvent(e) {
-      this.status = 'origin'
-      if (!this.isMouseDown) return false
+    mouseMoveEvent(e) {
+      e.preventDefault && e.preventDefault()
+      e.stopPropagation && e.stopPropagation()
+      this.status = 'active'
       const moveX = e.clientX - this.originX
       const moveY = e.clientY - this.originY
-      if (moveX < 0 || moveX + 40 >= this.w) return false
-      this.sliderLeft = moveX + 'px'
-      let blockLeft = ((this.w - this.block_w) / (this.w - 40)) * moveX
-      this.block.style.left = blockLeft + 'px'
-
-      this.status = 'active'
-      this.sliderMaskWidth = 40 + moveX + 'px'
-      this.trail.push(moveY)
+      if (moveX < 0) {
+        this.sliderLeft = 0
+        this.block.style.left = 0
+      } else if (moveX + 40 >= this.w) {
+        this.sliderLeft = this.w - 40
+        this.block.style.left = this.w - this.block_w + 'px'
+      } else {
+        this.sliderLeft = moveX
+        let blockLeft = ((this.w - this.block_w) / (this.w - 40)) * moveX
+        this.block.style.left = blockLeft + 'px'
+      }
     },
 
-    touchEndEvent(e) {
-      if (!this.isMouseDown) return false
-      this.isMouseDown = false
-      if (e.clientX === this.originX) {
-        this.status = 'origin'
-        return false
-      }
+    mouseUpEvent(e) {
+      console.log('mouseup')
+      document.removeEventListener('mousemove', this.mouseMoveEvent, false)
+      document.removeEventListener('mouseup', this.mouseUpEvent, false)
       this.verify()
     },
 
     verify() {
       const left = parseInt(this.block.style.left)
-      this.status = 'verifying'
+      this.verifying = true
       this.$emit('verify', left, (result = true) => {
+        this.verifying = false
         if (result) {
           // 验证通过
           this.status = 'success'
         } else {
           // 验证不通过
           this.status = 'fail'
+          this.refresh()
         }
       })
     },
 
     reset() {
       this.status = 'origin'
+      this.verifying = false
       this.sliderLeft = 0
       this.block.style.left = 0
-      this.sliderMaskWidth = 0
       this.canvasCtx.clearRect(0, 0, this.w, this.h)
       this.blockCtx.clearRect(0, 0, this.w, this.h)
       this.initImg()

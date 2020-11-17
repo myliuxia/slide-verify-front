@@ -8,7 +8,7 @@
       :imgurl="slideInfo.imgurl"
       :block_imgurl="slideInfo.miniimgurl"
       :keyCode="slideInfo.keyCode"
-      @refresh="getSlideInfo"
+      @refresh="refresh"
       @verify="validSuccess"
       :loading="loading"
     ></slide-verify>
@@ -42,17 +42,27 @@ export default {
   },
   methods: {
     // 滑块成功
-    async validSuccess(left) {
+    async validSuccess(left, callback) {
       console.log(left)
+      setTimeout(() => {
+        callback(false)
+      }, 2000)
+    },
+    // 刷新回调方法
+    async refresh(callback) {
+      let flag = await this.getSlideInfo()
+      callback(flag)
     },
     // 获得滑块验证图片等信息
-    async getSlideInfo() {
+    getSlideInfo() {
       this.loading = true
-      setTimeout(() => {
-        this.slideInfo.imgurl = require('@/assets/image/img.png')
-        this.slideInfo.miniimgurl = require('@/assets/image/slide-img.png')
-        this.loading = false
-      }, 2000)
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          this.slideInfo.imgurl = require('@/assets/image/img.png')
+          this.slideInfo.miniimgurl = require('@/assets/image/slide-img.png')
+          resolve(true)
+        }, 2000)
+      })
     },
   },
 }

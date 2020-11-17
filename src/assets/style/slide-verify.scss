@@ -4,27 +4,30 @@
 $--color-primary: #1890ff !default;
 $--color-success: #13c1a3 !default;
 $--color-warning: #ff8000 !default;
+$--color-fail: #f45454 !default;
 
-  @mixin container($type, $bgColor, $borderColor,) {
-    &.container-#{$type} {
-      .kr-slide-indicator{
-        background: RGBA(62, 122, 242, 0.2) !important;
-        border-color:  #3E7AF2;
-      }
-      .kr-slider {
-        background: #3E7AF2;
-        color: #fff;
-      }
-      .kr-slide-text{
-        display: none;
-      }
+
+
+@mixin container($type, $bgColor, $borderColor,) {
+  &.container-#{$type} {
+    .kr-slide-indicator{
+      background: mix(#FFFFFF, $bgColor, 90%) !important;
+      border-color:  $borderColor;
+    }
+    .kr-slider {
+      background: $bgColor;
+      color: #fff;
+    }
+    .kr-slide-text{
+      display: none;
     }
   }
+}
 
-  .slide-verify {
-    position: relative;
-    width: 320px;
-    
+.slide-verify {
+  position: relative;
+  width: 320px;
+  
   .slide-verify-block {
     position: absolute;
     left: 0;
@@ -54,7 +57,7 @@ $--color-warning: #ff8000 !default;
     text-align: center;
     width: 320px;
     height: 40px;
-    line-height: 40px;
+    line-height: 38px;
     background: #f7f9fa;
     box-sizing: border-box;
     border-radius: 2px;
@@ -88,16 +91,22 @@ $--color-warning: #ff8000 !default;
       .iconfont {
         font-size: 18px;
       }
+      .animation{
+        animation: turn 2s linear infinite;  
+        display: inline-block;
+      } 
+      @keyframes turn{
+        0% { transform: rotateZ(0deg); }
+        100% { transform: rotateZ(360deg); } 
+      }
     }
     .kr-slide-text{
       font-size: 12px;
       color: #45494c;
     }
     @include container(active,$--color-primary,$--color-primary);
-    @include container(loading,$--color-success,$--color-success);
     @include container(success,$--color-success,$--color-success);
-    @include container(fail,$--color-warning,$--color-warning);
-    @include container(verifying,$--color-warning,$--color-warning);
+    @include container(fail,$--color-fail,$--color-fail);
   }
   .mask-loading{
     position: absolute;
@@ -106,7 +115,7 @@ $--color-warning: #ff8000 !default;
     z-index: 1;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(0,0,0,.2);
   }
 
 }
