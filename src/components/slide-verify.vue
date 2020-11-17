@@ -1,17 +1,17 @@
 <template>
-  <div class="slide-verify" id="slideVerify" :style="style" onselectstart="return false;">
-    <div class="canves-box">
+  <div class="kr-slide-verify" id="slideVerify" :style="style" onselectstart="return false;">
+    <div class="kr-canves-box">
       <canvas :width="w" :height="h" ref="canvas"></canvas>
-      <canvas :width="w" :height="h" ref="block" class="slide-verify-block"></canvas>
-      <div @click="refresh" class="slide-verify-refresh">
+      <canvas :width="w" :height="h" ref="block" class="kr-slide-verify-block"></canvas>
+      <div @click="refresh" class="kr-slide-verify-refresh">
         <img :src="refreshImg" />
       </div>
-      <div class="mask-loading" v-show="loading">
+      <div class="kr-mask-loading" v-show="loading">
         <span class="kr-icon kr-icon-loading animation"></span>
       </div>
     </div>
     <div
-      class="slide-verify-slider"
+      class="kr-slide-verify-slider"
       :class="{
         'container-active': status == 'active',
         'container-success': status == 'success',

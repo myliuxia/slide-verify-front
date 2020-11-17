@@ -1,12 +1,8 @@
 
-
-
 $--color-primary: #1890ff !default;
 $--color-success: #13c1a3 !default;
 $--color-warning: #ff8000 !default;
 $--color-fail: #f45454 !default;
-
-
 
 @mixin container($type, $bgColor, $borderColor,) {
   &.container-#{$type} {
@@ -24,16 +20,16 @@ $--color-fail: #f45454 !default;
   }
 }
 
-.slide-verify {
+.kr-slide-verify {
   position: relative;
   width: 320px;
   
-  .slide-verify-block {
+  .kr-slide-verify-block {
     position: absolute;
     left: 0;
     top: 0;
   }
-  .canves-box{
+  .kr-canves-box{
     position: relative;
     width: 320px;
     height: 160px;
@@ -41,7 +37,7 @@ $--color-fail: #f45454 !default;
     overflow: hidden;
     background-color: rgba(255,255,255,0.7);
   }
-  .slide-verify-refresh {
+  .kr-slide-verify-refresh {
     position: absolute;
     z-index: 2;
     right: 5px;
@@ -52,7 +48,7 @@ $--color-fail: #f45454 !default;
     font-size: 0;
     line-height: 0;
   }
-  .slide-verify-slider {
+  .kr-slide-verify-slider {
     position: relative;
     text-align: center;
     width: 320px;
@@ -113,7 +109,7 @@ $--color-fail: #f45454 !default;
     @include container(fail,$--color-fail,$--color-fail);
   }
 
-  .mask-loading{
+  .kr-mask-loading{
     position: absolute;
     top: 0;
     left: 0;
