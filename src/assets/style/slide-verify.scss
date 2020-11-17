@@ -40,10 +40,10 @@ $--color-fail: #f45454 !default;
     border-radius: 2px;
     overflow: hidden;
     background-color: rgba(255,255,255,0.7);
-    padding-bottom: 15px;
   }
   .slide-verify-refresh {
     position: absolute;
+    z-index: 2;
     right: 5px;
     top: 5px;
     width: 28px;
@@ -62,12 +62,13 @@ $--color-fail: #f45454 !default;
     box-sizing: border-box;
     border-radius: 2px;
     border: 1px solid #e4e7eb;
+    margin-top: 15px;
     .kr-slide-indicator {
       position: absolute;
       left: -1px;
       top: -1px;
       height: 40px;
-      background: RGBA(62, 122, 242, 0.2);
+      background: transparent;
       border: 1px solid transparent;
       box-sizing: border-box;
       border-radius: 2px;
@@ -84,11 +85,14 @@ $--color-fail: #f45454 !default;
       transition: background .2s linear;
       color: #45494c;
       border-radius: 2px;
+      &.transition{
+        transition: all .2s linear;
+      }
       &:hover{
         background: #3E7AF2;
         color: #fff;
       }
-      .iconfont {
+      .kr-icon {
         font-size: 18px;
       }
       .animation{
@@ -108,6 +112,7 @@ $--color-fail: #f45454 !default;
     @include container(success,$--color-success,$--color-success);
     @include container(fail,$--color-fail,$--color-fail);
   }
+
   .mask-loading{
     position: absolute;
     top: 0;
@@ -115,7 +120,22 @@ $--color-fail: #f45454 !default;
     z-index: 1;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,.2);
+    background-color: #f7f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .kr-icon {
+      font-size: 28px;
+      color: #45494c;
+    }
+    .animation{
+      animation: turn 2s linear infinite;  
+      display: block;
+    } 
+    @keyframes turn{
+      0% { transform: rotateZ(0deg); }
+      100% { transform: rotateZ(360deg); } 
+    }
   }
 
 }

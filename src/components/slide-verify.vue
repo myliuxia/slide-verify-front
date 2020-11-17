@@ -6,6 +6,9 @@
       <div @click="refresh" class="slide-verify-refresh">
         <img :src="refreshImg" />
       </div>
+      <div class="mask-loading" v-show="loading">
+        <span class="kr-icon kr-icon-loading animation"></span>
+      </div>
     </div>
     <div
       class="slide-verify-slider"
@@ -18,7 +21,12 @@
       <div class="kr-slide-indicator" :style="slideIndicatorStyle"></div>
 
       <!-- slider -->
-      <div @mousedown="mouseDownEvent" class="kr-slider" :style="sliderStyle">
+      <div
+        @mousedown="mouseDownEvent"
+        class="kr-slider"
+        :class="{'transition':status == 'origin'}"
+        :style="sliderStyle"
+      >
         <span v-if="verifying" class="kr-icon kr-icon-loading animation"></span>
         <span
           v-else
@@ -30,10 +38,7 @@
           }"
         ></span>
       </div>
-      <span class="kr-slide-text">{{ sliderText }}</span>
-    </div>
-    <div class="mask-loading" v-show="loading">
-      <span class="kr-icon kr-icon-loading animation"></span>
+      <span class="kr-slide-text">{{ loading ? '加载中' : sliderText }}</span>
     </div>
   </div>
 </template>
@@ -85,11 +90,13 @@ export default {
       type: String,
       default: '',
     },
-    keyCode: [String, Number],
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      loading: false, // 加载中
       verifying: false, // 验证中
       status: 'origin', // 状态 origin：原始状态；active:拖动激活状态；success:验证成功；fail:验证失败
       canvasCtx: null,
@@ -112,11 +119,6 @@ export default {
     },
     slideIndicatorStyle() {
       return { width: this.sliderLeft + 40 + 'px' }
-    },
-  },
-  watch: {
-    keyCode() {
-      this.reset()
     },
   },
   mounted() {
@@ -155,10 +157,9 @@ export default {
       }
     },
     refresh() {
-      this.loading = true
-      this.$emit('refresh', (val) => {
-        this.reset()
-        this.loading = false
+      this.reset()
+      this.$emit('refresh', () => {
+        this.initImg()
       })
     },
     // 鼠标点击
@@ -171,6 +172,7 @@ export default {
       document.addEventListener('mouseup', this.mouseUpEvent, false)
     },
 
+    // 鼠标移动
     mouseMoveEvent(e) {
       e.preventDefault && e.preventDefault()
       e.stopPropagation && e.stopPropagation()
@@ -190,6 +192,7 @@ export default {
       }
     },
 
+    // 鼠标释放
     mouseUpEvent(e) {
       console.log('mouseup')
       document.removeEventListener('mousemove', this.mouseMoveEvent, false)
@@ -208,7 +211,9 @@ export default {
         } else {
           // 验证不通过
           this.status = 'fail'
-          this.refresh()
+          setTimeout(() => {
+            this.refresh()
+          }, 1000)
         }
       })
     },
@@ -220,7 +225,6 @@ export default {
       this.block.style.left = 0
       this.canvasCtx.clearRect(0, 0, this.w, this.h)
       this.blockCtx.clearRect(0, 0, this.w, this.h)
-      this.initImg()
     },
   },
 }

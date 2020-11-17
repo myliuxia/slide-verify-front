@@ -51,17 +51,18 @@ export default {
     // 刷新回调方法
     async refresh(callback) {
       let flag = await this.getSlideInfo()
-      callback(flag)
+      callback()
     },
     // 获得滑块验证图片等信息
     getSlideInfo() {
       this.loading = true
       return new Promise((resolve, reject) => {
         setTimeout(() => {
+          this.loading = false
           this.slideInfo.imgurl = require('@/assets/image/img.png')
           this.slideInfo.miniimgurl = require('@/assets/image/slide-img.png')
           resolve(true)
-        }, 2000)
+        }, 3000)
       })
     },
   },
