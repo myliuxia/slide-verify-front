@@ -5,8 +5,8 @@
       :h="slideInfo.h"
       :block_w="slideInfo.block_w"
       :block_h="slideInfo.block_h"
-      :imgurl="slideInfo.imgurl"
-      :block_imgurl="slideInfo.miniimgurl"
+      :img="slideInfo.img"
+      :block_img="slideInfo.miniimg"
       :keyCode="slideInfo.keyCode"
       @refresh="refresh"
       @verify="validSuccess"
@@ -16,6 +16,7 @@
 </template>
 <script>
 import SlideVerify from './components/slide-verify.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -30,9 +31,9 @@ export default {
         h: 160,
         block_w: 50,
         block_h: 160,
-        imgurl: '',
-        miniimgurl: '',
-        keyCode: '',
+        img: '',
+        miniimg: '',
+        id: '',
       },
       loading: false,
     }
@@ -43,10 +44,20 @@ export default {
   methods: {
     // 滑块成功
     async validSuccess(left, callback) {
-      console.log(left)
-      setTimeout(() => {
-        callback(false)
-      }, 2000)
+      axios
+        .post('/slider/validateCaptcha', {
+          id: this.slideInfo.id,
+          offsetX: left,
+          offsetY: 0,
+        })
+        .then((response) => {
+          let res = response.data.data
+          callback(res)
+        })
+        .catch((error) => {
+          console.log(error)
+          callback(false)
+        })
     },
     // 刷新回调方法
     async refresh(callback) {
@@ -57,12 +68,24 @@ export default {
     getSlideInfo() {
       this.loading = true
       return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          this.loading = false
-          this.slideInfo.imgurl = require('@/assets/image/img.png')
-          this.slideInfo.miniimgurl = require('@/assets/image/slide-img.png')
-          resolve(true)
-        }, 3000)
+        axios
+          .get('/slider/randomCaptcha')
+          .then((response) => {
+            this.loading = false
+            let res = response.data
+            this.slideInfo.id = res.data.id
+            this.slideInfo.w = res.data.originWidth
+            this.slideInfo.h = res.data.originHeight
+            this.slideInfo.block_w = res.data.blockWidth
+            this.slideInfo.block_h = res.data.blockHeight
+            this.slideInfo.img = res.data.bottomLayerImg
+            this.slideInfo.miniimg = res.data.sliderLayerImg
+            resolve(true)
+          })
+          .catch((error) => {
+            this.loading = false
+            resolve(false)
+          })
       })
     },
   },

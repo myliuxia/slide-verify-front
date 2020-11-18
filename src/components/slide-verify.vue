@@ -1,5 +1,5 @@
 <template>
-  <div class="kr-slide-verify" id="slideVerify" :style="style" onselectstart="return false;">
+  <div class="kr-slide-verify" id="slideVerify" :style="style">
     <div class="kr-canves-box">
       <canvas :width="w" :height="h" ref="canvas"></canvas>
       <canvas :width="w" :height="h" ref="block" class="kr-slide-verify-block"></canvas>
@@ -51,8 +51,8 @@ import '@/assets/iconfont/iconfont.css'
  * @property {Number} block_w 滑块宽度
  * @property {Number} block_h 滑块宽度
  * @property {String} sliderText 滑动操作栏提示文字
- * @property {String} imgurl 画布图片地址
- * @property {String} block_imgurl 滑块图片地址
+ * @property {String} img 画布图片地址
+ * @property {String} block_img 滑块图片地址
  * @property {Boolean} loading 加载标识
  * @event {Function} refresh 刷新回调方法
  * @event {Function} success 滑块确认回调方法，参数 left：横坐标滑动量
@@ -82,11 +82,11 @@ export default {
       type: String,
       default: '向右拖动滑块填充拼图',
     },
-    imgurl: {
+    img: {
       type: String,
       default: '',
     },
-    block_imgurl: {
+    block_img: {
       type: String,
       default: '',
     },
@@ -140,18 +140,18 @@ export default {
       const img = document.createElement('img')
       img.onload = onload
       img.onerror = () => {
-        img.src = that.imgurl
+        img.src = that.img
       }
-      img.src = that.imgurl
+      img.src = that.img
       img.onload = function () {
         that.canvasCtx.drawImage(img, 0, 0, that.w, that.h)
       }
       const img1 = document.createElement('img')
       var blockCtx = that.blockCtx
       img1.onerror = () => {
-        img1.src = that.block_imgurl
+        img1.src = that.block_img
       }
-      img1.src = that.block_imgurl
+      img1.src = that.block_img
       img1.onload = function () {
         blockCtx.drawImage(img1, 0, 0, that.block_w, that.block_h)
       }
