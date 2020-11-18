@@ -1,4 +1,4 @@
-# kr-slide-verify-front
+# kr-slide-verify
 
 ## Project setup
 ```

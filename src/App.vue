@@ -9,7 +9,7 @@
       :block_img="slideInfo.miniimg"
       :keyCode="slideInfo.keyCode"
       @refresh="refresh"
-      @verify="validSuccess"
+      @verify="valid"
       :loading="loading"
     ></slide-verify>
   </div>
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     // 滑块成功
-    async validSuccess(left, callback) {
+    async valid(left, callback) {
       axios
         .post('/slider/validateCaptcha', {
           id: this.slideInfo.id,
@@ -52,7 +52,16 @@ export default {
         })
         .then((response) => {
           let res = response.data.data
-          callback(res)
+          if (res) {
+            // 验证成功
+            setTimeout(() => {
+              location.reload()
+            }, 1000)
+            callback(true)
+          } else {
+            // 验证失败
+            callback(false)
+          }
         })
         .catch((error) => {
           console.log(error)

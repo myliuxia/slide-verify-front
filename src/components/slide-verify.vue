@@ -122,13 +122,10 @@ export default {
     },
   },
   mounted() {
-    this.init()
+    this.initDom()
     this.initImg()
   },
   methods: {
-    init() {
-      this.initDom()
-    },
     initDom() {
       this.block = this.$refs.block
       this.canvasStr = this.$refs.canvas
@@ -156,6 +153,7 @@ export default {
         blockCtx.drawImage(img1, 0, 0, that.block_w, that.block_h)
       }
     },
+    // 刷新方法
     refresh() {
       this.reset()
       this.$emit('refresh', () => {
@@ -199,7 +197,7 @@ export default {
       document.removeEventListener('mouseup', this.mouseUpEvent, false)
       this.verify()
     },
-
+    // 验证方法
     verify() {
       const left = parseInt(this.block.style.left)
       this.verifying = true

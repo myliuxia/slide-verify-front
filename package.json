@@ -1,11 +1,16 @@
 {
-  "name": "kr-slide-verify-front",
-  "version": "0.1.0",
-  "private": true,
+  "name": "kr-slide-verify",
+  "version": "1.0.0",
+  "description": "一个基于Vue的滑块验证组件。",
+  "publish": true,
+  "main": "lib/kr-slide-verify.umd.min.js",
+  "keyword": "slide-verify slide kr",
+  "author": "liuxia",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name kr-slide-verify --dest lib src/components/index.js"
   },
   "dependencies": {
     "axios": "0.18.0",
