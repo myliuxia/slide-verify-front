@@ -19,7 +19,7 @@ Vue.use(KrSlideVerify)
 
 使用
 ```html
-  <slide-verify
+  <kr-slide-verify
     :w="slideInfo.w"
     :h="slideInfo.h"
     :block_w="slideInfo.block_w"
@@ -29,7 +29,7 @@ Vue.use(KrSlideVerify)
     :loading="loading"
     @refresh="refresh"
     @verify="valid"
-  ></slide-verify>
+  ></kr-slide-verify>
 ```
 
 ## Attributes

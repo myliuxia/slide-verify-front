@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <slide-verify
+    <kr-slide-verify
       :w="slideInfo.w"
       :h="slideInfo.h"
       :block_w="slideInfo.block_w"
@@ -11,18 +11,14 @@
       @refresh="refresh"
       @verify="valid"
       :loading="loading"
-    ></slide-verify>
+    ></kr-slide-verify>
   </div>
 </template>
 <script>
-import SlideVerify from './components/slide-verify.vue'
 import axios from 'axios'
 
 export default {
   name: 'App',
-  components: {
-    SlideVerify,
-  },
   data() {
     return {
       visible: false,

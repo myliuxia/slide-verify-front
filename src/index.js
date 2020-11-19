@@ -1,5 +1,5 @@
 
-import SlideVerify from './slide-verify.vue'
+import SlideVerify from './components/slide-verify.vue'
 const install = function (Vue, opts = {}) {
   Vue.component('kr-slide-verify', SlideVerify)
 }
