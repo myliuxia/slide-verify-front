@@ -1,6 +1,6 @@
 # kr-slide-verify
 ### 简介
-一个基于Vue的滑块验证组件，该组件可配后[后端](https://code.keywaysoft.com/F-00469/captcha)代码实现滑块验证功能！
+一个基于Vue的滑块验证组件，该组件可配后[后端](https://code.keywaysoft.com/F-00469/captcha)代码实现滑块验证功能！[示例](http://192.168.7.229:9080/)
 
 ### 安装与使用
 npm安装组件
