@@ -13,6 +13,7 @@ npm install kr-slide-verity
 ``` javascript
 import Vue from 'vue'
 import KrSlideVerify from "kr-slide-verify"
+import 'kr-slide-verify/lib/kr-slide-verify.css'
 
 Vue.use(KrSlideVerify)
 ```
